@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "MessengerDataTransfer"
 include ':simple-client'
 include ':simple-service'
+include ':commonclient-library'
+include ':commonservice-library'

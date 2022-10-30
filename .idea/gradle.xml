@@ -10,6 +10,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/commonclient-library" />
+            <option value="$PROJECT_DIR$/commonservice-library" />
             <option value="$PROJECT_DIR$/simple-client" />
             <option value="$PROJECT_DIR$/simple-service" />
           </set>
