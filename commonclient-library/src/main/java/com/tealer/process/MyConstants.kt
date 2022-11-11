@@ -1,4 +1,4 @@
-package com.tealer.commonclient_library
+package com.tealer.process
 
 object MyConstants {
     const val MSG_FROM_CLIENT: Int=1

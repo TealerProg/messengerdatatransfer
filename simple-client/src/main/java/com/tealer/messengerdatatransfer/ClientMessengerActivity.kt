@@ -8,7 +8,7 @@ import android.os.*
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.tealer.commonclient_library.MyConstants
+import com.tealer.process.MyConstants
 import com.tealer.messengerdatatransfer.databinding.ActivityClientMessengerBinding
 
 class ClientMessengerActivity : AppCompatActivity() {
@@ -95,7 +95,7 @@ class ClientMessengerActivity : AppCompatActivity() {
                 }
                 binding.llContainer.addView(textView)
 
-                var msgFromClient=Message.obtain(null,MyConstants.MSG_SUM,a,b)
+                var msgFromClient=Message.obtain(null, MyConstants.MSG_SUM,a,b)
                 msgFromClient.replyTo=mMessenger
 
                 if(isConn){
