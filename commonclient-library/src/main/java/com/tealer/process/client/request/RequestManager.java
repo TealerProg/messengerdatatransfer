@@ -3,8 +3,13 @@ package com.tealer.process.client.request;
 import android.os.Message;
 import android.os.Parcelable;
 
+import com.tealer.process.client.ClientMessageManager;
+import com.tealer.process.client.beat.HeartBeatTimer;
 import com.tealer.process.client.callback.Callback;
 import com.tealer.process.client.callback.ServiceConnectCallback;
+import com.tealer.process.client.config.ClientConstantConfig;
+import com.tealer.process.client.log.LogHelper;
+import com.tealer.process.client.utils.ServiceHelperCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +38,39 @@ public class RequestManager {
         return requestManager;
     }
 
-    public void request(String packageName, Message message, ServiceConnectCallback serviceConnectCallback){
+    public void request(String packageName, Message message, ServiceConnectCallback serviceConnectCallback) {
         //启动服务
-       onStartService(packageName,serviceConnectCallback);
-       //添加请求
-       //添加消息
+        onStartService(packageName, serviceConnectCallback);
+        //添加请求
+        ClientMessageManager.get().addLogMessage(packageName,"RequestManager[request] 发送一个请求:"+message.arg1 + " 时间:" + message.arg2);
+        //添加消息
+        ClientMessageManager.get().addMessage(packageName,message);
 
     }
 
     private void onStartService(String packageName, ServiceConnectCallback serviceConnectCallback) {
+        //判断服务是否连接
+        if (!ClientMessageManager.get().isConnected(packageName)) {
+            ClientMessageManager.get().startHeartBeatTimer(packageName, new HeartBeatTimer(300, COUNT_EXECUTE_TIMES) {
+                @Override
+                public void onTick(long currentExecuteTimes, long millisUntilFinished) {
+                    boolean connected = ClientMessageManager.get().isConnected(packageName);
+                    LogHelper.i(TAG, "Tick currentExecuteTimes:" + currentExecuteTimes + ", isConnected：" + connected);
+                    if (!connected) {
+                        ClientMessageManager.get().onServiceDisconnected(packageName);
+                        if (currentExecuteTimes >= COUNT_EXECUTE_TIMES) {
+                            if (null != serviceConnectCallback) {
+                                serviceConnectCallback.onFailure();
+                            }
+                            ClientMessageManager.get().unbindServie(packageName);
+                        } else {
+                            LogHelper.w(TAG, "尝试重新启动服务，Service Action:" + ServiceHelperCompat.getServiceAction(packageName, ClientConstantConfig.Common.KEY_SERVICE_ACTION_SUFFIX));
+                            ClientMessageManager.get().bindService(packageName);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -70,6 +99,7 @@ public class RequestManager {
 
     /**
      * 根据请求Id，请求时间获得对应的请求信息
+     *
      * @param requestId
      * @param requestTime
      * @return
