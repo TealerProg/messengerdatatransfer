@@ -1,0 +1,20 @@
+apply plugin: 'auto-register'
+
+ext.registerInfoList = [
+        [
+                'scanInterface'             : 'com.tealer.process.service.response.ResponseService'
+                , 'scanSuperClasses'        : ['com.tealer.process.service.response.ResponseResultService']
+                , 'codeInsertToClassName'   : 'com.tealer.process.service.ResponseServiceListManager'
+                //未指定codeInsertToMethodName，默认插入到static块中，故此处register必须为static方法
+                , 'registerMethodName'      : 'register' //
+                , 'exclude'                 : [
+                //排除的类，支持正则表达式（包分隔符需要用/表示，不能用.）
+                'com.tealer.process.service.response.ResponseResultService'.replaceAll('\\.', '/') //排除这个基类
+                ]
+        ]
+]
+
+autoregister {
+    registerInfo = registerInfoList
+    cacheEnabled = false
+}

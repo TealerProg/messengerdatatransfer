@@ -49,8 +49,34 @@ public class Request {
         //记录回调对象，用于关联此对象，发送后会清楚
         message.obj = callback;
        //添加到消息队列
+        RequestManager.get().request(packageName,message,serviceConnectCallback);
+    }
 
+    /**
+     * 处理事件，不带回调
+     * @param packageName
+     * @param params
+     * @param <T>
+     */
+    public <T extends Parcelable> void request(String packageName, Bundle params) {
+        //发送请求
+        Message message = Message.obtain();
+        //区别码
+        message.what = ClientConstantConfig.Common.FORWARD_MESSAGE;
+        //传入数据
+        message.setData(params);
+        //记录请求Id
+        message.arg1 = requestId;
+        //记录请求时间，用于区分多次发送请求
+        long requestTime = SystemClock.elapsedRealtime();
+        message.arg2 = (int) requestTime;
+        //添加到消息队列
+        RequestManager.get().request(packageName,message,serviceConnectCallback);
 
+    }
+
+    public void setServiceConnectCallback(ServiceConnectCallback serviceConnectCallback) {
+        this.serviceConnectCallback = serviceConnectCallback;
     }
 
 

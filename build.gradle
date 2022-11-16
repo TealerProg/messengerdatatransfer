@@ -5,6 +5,11 @@ buildscript {
         jcenter()
         mavenCentral()
     }
+    dependencies {
+        //noinspection GradlePluginVersion,GradlePluginVersion
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.billy.android:autoregister:1.4.1'
+    }
 }
 
 

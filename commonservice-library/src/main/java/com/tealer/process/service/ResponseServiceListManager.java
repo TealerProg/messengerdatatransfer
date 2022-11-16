@@ -14,12 +14,18 @@ import java.util.List;
  */
 public class ResponseServiceListManager {
 
-    public final static List<ResponseService> responseServiceLists = new ArrayList<>();
+    private final static List<ResponseService> responseServiceLists = new ArrayList<>();
 
-
-    private static void register(ResponseService responseService) {
+    /**
+     * 通过插件加载实现了ResponseService接口的类
+     *
+     * @param responseService
+     */
+    public static void register(ResponseService responseService) {
+        System.out.println("走了方法");
         if (responseService != null) {
             responseServiceLists.add(responseService);
+
         }
     }
 

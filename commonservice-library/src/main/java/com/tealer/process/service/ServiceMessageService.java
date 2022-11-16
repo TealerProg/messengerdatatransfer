@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.tealer.process.service.config.ServiceModuleConfig;
+import com.tealer.process.service.log.LogMessageManager;
 import com.tealer.process.service.response.ResponseResultService;
 import com.tealer.process.service.response.ResponseService;
 
@@ -47,7 +48,7 @@ public class ServiceMessageService extends Service {
                     //日志消息
                     String msg = message.getData().getString(ServiceModuleConfig.Common.StringKEY_APP_MESSAGE_LOG);
                     if (!TextUtils.isEmpty(msg)) {
-                        //TODO 输出日志消息
+                        LogMessageManager.post(msg);
                     }
                     break;
                 case ServiceModuleConfig.Common.FORWARD_MESSAGE:
@@ -63,13 +64,13 @@ public class ServiceMessageService extends Service {
                                 model.run(applicationContext, message.getData());
                                 //清空 replyMessage
                                 ((ResponseResultService) model).setReplyMessage(null);
-                                //回复结果
-                                 //TODO 回复结果
+                                  //回复结果
+                                LogMessageManager.post("ServicesMessageService:[handleMessage] 执行异步事件:"+message.arg1+" 请求时间:"+message.arg2);
                             }else{
                                 //执行事件
                                 model.run(applicationContext,message.getData());
                                 //无需操作
-                                //TODO 无需操作日志
+                                LogMessageManager.post("ServicesMessageService:[handleMessage] 执行事件:"+message.arg1+" 请求时间:"+message.arg2);
                             }
 
                         }
@@ -121,6 +122,7 @@ public class ServiceMessageService extends Service {
             }
         } else {
             //TODO  Log日志输出
+            LogMessageManager.post("初始化注册服务对象失败，responseServiceLists is null,未配置响应服务类!");
         }
     }
 

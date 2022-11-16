@@ -3,11 +3,11 @@
 
     <application>
         <service
-            android:name="com.tealer.process.service.ServciesMessengerServcie"
+            android:name="com.tealer.process.service.ServiceMessageService"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
-                <action android:name="com.tealer.process.messengerservice"></action>
+            <intent-filter android:priority="1000">
+                <action android:name="${applicationId}.authenticator.service"></action>
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </service>

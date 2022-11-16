@@ -52,7 +52,7 @@ public abstract class ResponseResultService implements ResponseService {
     }
 
     private Response newResponse() {
-        return newResponse();
+        return new Response();
     }
 
     /**

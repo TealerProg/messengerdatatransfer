@@ -71,7 +71,7 @@ public abstract class HeartBeatTimer {
                 final long millisLeft=startTimeMills+(elapsedRealTime-currentTimeMills);
 
                 //回调时长
-                onTick(currentTimeMills,millisLeft);
+                onTick(currentExecuteTimes,millisLeft);
                 //发送新的事件
                 sendMessageDelayed(obtainMessage(MSG),countdownInterval);
 
